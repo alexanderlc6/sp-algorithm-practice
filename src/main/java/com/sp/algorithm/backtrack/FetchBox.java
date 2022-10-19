@@ -1,8 +1,5 @@
 package com.sp.algorithm.backtrack;
 
-import com.sun.tools.javac.util.ArrayUtils;
-import sun.security.util.ArrayUtil;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
