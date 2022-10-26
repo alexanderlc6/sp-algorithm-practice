@@ -31,8 +31,8 @@ public class RemoveDuplicate {
     }
 
     public static void main(String[] args) {
+        System.out.println("=====删除重复出现的元素=====");
         MyLinkedList list = new MyLinkedList().initList(new int[] { 1,1,2,3,3});
-        list.printValues(new RemoveDuplicate().removeDupElement(list.dummy));
-
+        list.printValues(new RemoveDuplicate().removeDupElement(list.dummy.next));
     }
 }

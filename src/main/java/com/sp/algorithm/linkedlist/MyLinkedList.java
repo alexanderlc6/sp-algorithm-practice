@@ -1,6 +1,8 @@
 package com.sp.algorithm.linkedlist;
 
-import java.util.List;
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @description:
@@ -11,12 +13,12 @@ public class MyLinkedList {
     MyLinkedList list;
 
     /**
-     * 假头
+     * 假头节点
      */
     public ListNode dummy;
 
     /**
-     * 尾元素
+     * 尾节点
      */
     public ListNode tail;
 
@@ -68,6 +70,7 @@ public class MyLinkedList {
 
         tail.next = node;
         tail = node;
+        length++;
     }
 
     /**
@@ -120,12 +123,12 @@ public class MyLinkedList {
      * @param index
      * @return
      */
-    public int get(int index){
+    public ListNode get(int index){
         if(index < 0 || index >= length){
-            return -1;
+            return null;
         }
 
-        return getPrevNode(index).next.val;
+        return getPrevNode(index).next;
     }
 
     /**
@@ -178,6 +181,65 @@ public class MyLinkedList {
     }
 
     /**
+     * 判断链表中是否存在环
+     * @param head
+     * @return 相遇的节点
+     */
+    public Boolean hasCircle(ListNode head){
+        //当链表为空或只有一个节点时,无环
+        if(head == null || head.next == null){
+            return null;
+        }
+
+        ListNode s1 = head;
+        ListNode s2 = head;
+        while (s2 != null && s2.next != null){
+            s2 = s2.next.next;
+            s1 = s1.next;
+
+            if(s1 == s2){
+                return true;
+            }
+        }
+
+        return s1 == s2;
+    }
+
+    public ListNode detectCircle(ListNode head){
+        //当链表为空或只有一个节点时,无环
+        if(head == null || head.next == null){
+            return null;
+        }
+
+        ListNode s1 = head;
+        ListNode s2 = head;
+        while (s2 != null && s2.next != null){
+            s2 = s2.next.next;
+            s1 = s1.next;
+
+            if(s1 == s2){
+                break;
+            }
+        }
+
+        if(s1 != s2){
+            return null;
+        }
+
+        //s1指回从head出发
+        s1 = head;
+
+        //两个指针一起走
+        while (s1 != s2){
+            s1 = s1.next;
+            s2 = s2.next;
+        }
+
+        //返回环形入口节点
+        return s1;
+    }
+
+    /**
      * 打印链表
      * @param head
      */
@@ -186,13 +248,25 @@ public class MyLinkedList {
             return;
         }
 
-        ListNode curNode = head.next;
+        ListNode curNode = head;
         while (curNode != null){
             System.out.printf(curNode.val + " ");
             curNode = curNode.next;
         }
 
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=====判断链表中是否存在环=====");
+        MyLinkedList list = new MyLinkedList().initList(new int[] { 3,2,0,1,2,-4});
+
+        //Mock:设置环节点
+        list.get(list.length - 1).setNext(list.get(3));
+        System.out.println(list.hasCircle(list.dummy.next));
+
+        System.out.println("=====获取链表中存在的环节点=====");
+        System.out.println((list.detectCircle(list.dummy.next).getVal()));
     }
 
     /**
