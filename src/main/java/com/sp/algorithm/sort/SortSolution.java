@@ -12,6 +12,7 @@ public class SortSolution {
 
     /**
      * 数组拆分区间查找
+     * 时:O(nlgn),空:O(n)
      * @param a
      * @param b
      * @param e
@@ -29,11 +30,16 @@ public class SortSolution {
         int i = b, j = m, to = b;
         while (i < m || j < e){
             if(j >= e || (i < m && a[i] <= a[j])){
+                //左子数组的[b,i)和右子数组的[m,j)在nums[i]之前已经被合并了
                 t[to++] = a[i++];
+
+                //求解逆序对个数:nums[i]与[m,j)中的元素构成了逆序对(即a[i]>a[j]但i<j),因此需要加上区间j-m元素的个数
                 cnt += (j - m);
-                System.out.println("cnt:" + cnt);
-            }else{
+//                System.out.println("cnt:" + cnt);
+//            }else{
                 t[to++] = a[j++];
+                //求解顺序对个数(即a[i]<a[j]但i>j)
+                cnt += i - b;
             }
         }
 
@@ -60,10 +66,10 @@ public class SortSolution {
     }
 
     public static void main(String[] args) {
-        int[] data = new int[] { 3,5,1,6,2};
+        int[] data = new int[] {3,5,1,6,2};
 
         //合并排序--求逆序对个数
-        System.out.println(new SortSolution().reversePairs(data));
+        System.out.println("逆序对个数:" + new SortSolution().reversePairs(data));
 
         //快速排序
         new SortSolution().execQuickSort(data);

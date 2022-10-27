@@ -6,11 +6,11 @@ package com.sp.algorithm.tree;
  * @date: Created in 3/7/22 12:41 AM
  */
 public class TreeNode {
-    int val;
+    int val = 0;
     
-    TreeNode left;
+    TreeNode left = null;
     
-    TreeNode right;
+    TreeNode right = null;
     TreeNode() {}
     TreeNode(int val) { this.val = val; }
     TreeNode(int val, TreeNode left, TreeNode right) {

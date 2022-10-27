@@ -83,7 +83,7 @@ public class FindMidVal {
             return right;
         }
 
-        //方法3:每次找第min(k / 2, len(nums1)个小的数
+        //方法3:每次找第min(k / 2, len(nums1)小的数
 //        int m = nums1.length;
 //        int n = nums2.length;
 //        int left = (n + m + 1) / 2;
