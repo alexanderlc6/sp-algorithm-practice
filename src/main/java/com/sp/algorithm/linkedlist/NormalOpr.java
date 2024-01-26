@@ -1,5 +1,9 @@
 package com.sp.algorithm.linkedlist;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
 /**
  * 常用链表操作
  *
@@ -29,6 +33,24 @@ public class NormalOpr {
 
         //返回新链表的头
         return dummy.next;
+    }
+
+    /**
+     * 递归反转方法
+     * @param head
+     * @return
+     */
+    public MyLinkedList.ListNode ReverseList(MyLinkedList.ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+
+        MyLinkedList.ListNode next = head.next;
+        MyLinkedList.ListNode reverse = ReverseList(next);
+
+        next.next = head;
+        head.next = null;
+        return reverse;
     }
 
     /**
@@ -229,6 +251,172 @@ public class NormalOpr {
 
 
         return result;
+    }
+
+    /**
+     * 反转区间段[m,n]
+     * @param head
+     * @param m
+     * @param n
+     * @return
+     */
+    public MyLinkedList.ListNode reverseBetween(MyLinkedList.ListNode head, int m, int n){
+        MyLinkedList.ListNode dummy = new MyLinkedList.ListNode();
+        dummy.next = head;
+
+        MyLinkedList.ListNode pre = dummy;
+        MyLinkedList.ListNode cur = head;
+
+        //找到第m个结点
+        for (int i = 1; i < m; i++) {
+            pre = cur;
+            cur = cur.next;
+        }
+
+        //反转
+        for (int i = m; i < n; i++) {
+            MyLinkedList.ListNode tmp = cur.next;
+            cur.next = tmp.next;
+            tmp.next = pre.next;
+            pre.next = tmp;
+        }
+
+        return dummy.next;
+    }
+
+    /**
+     * 递归合并两个排序的链表
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public MyLinkedList.ListNode Merge(MyLinkedList.ListNode list1, MyLinkedList.ListNode list2) {
+        if(list1 == null || list2 == null){
+            return list1 != null ? list1 : list2;
+        }
+
+        if(list1.val < list2.val){
+            list1.next = Merge(list1.next, list2);
+            return list1;
+        }else{
+            list2.next = Merge(list1, list2.next);
+            return list2;
+        }
+    }
+
+    /**
+     * 判断是否有环-哈希表法
+     * @param head
+     * @return
+     */
+    public boolean hasCycleHashSet(MyLinkedList.ListNode head) {
+        MyLinkedList.ListNode pos = head;
+        Set<MyLinkedList.ListNode> visited = new HashSet<MyLinkedList.ListNode>();
+
+        while(pos != null){
+            if(visited.contains(pos)){
+                return true;
+            }else{
+                visited.add(pos);
+            }
+
+            pos = pos.next;
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断是否有环-快慢指针法
+     * @param head
+     * @return
+     */
+    public boolean hasCycleFastSlow(MyLinkedList.ListNode head) {
+        MyLinkedList.ListNode fast = head;
+        MyLinkedList.ListNode slow = head;
+
+        while (fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断是否有环，返回环开始的结点
+     * @param pHead
+     * @return
+     */
+    public MyLinkedList.ListNode entryNodeOfLoop(MyLinkedList.ListNode pHead) {
+        MyLinkedList.ListNode slow = hasCycleFindNode(pHead);
+        if(slow == null){
+            return null;
+        }
+
+        //令快指针在头部,则fast和slow单步走,再次相遇(退出while时)即为环的入口点
+        MyLinkedList.ListNode fast = pHead;
+        while(fast != slow){
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+
+    public MyLinkedList.ListNode hasCycleFindNode(MyLinkedList.ListNode head){
+        if(head == null){
+            return null;
+        }
+
+        MyLinkedList.ListNode fast = head;
+        MyLinkedList.ListNode slow = head;
+
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow){
+                return slow;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 找到链表中倒数最后k个结点
+     * @param pHead
+     * @param k
+     * @return
+     */
+    public MyLinkedList.ListNode FindKthToTail (MyLinkedList.ListNode pHead, int k) {
+        if(pHead == null || k == 0){
+            return null;
+        }
+
+        Stack<MyLinkedList.ListNode> nodeStack = new Stack();
+        while(pHead != null){
+            nodeStack.push(pHead);
+            pHead = pHead.next;
+        }
+
+        if(nodeStack.size() < k){
+            return null;
+        }
+
+        MyLinkedList.ListNode firstNode = nodeStack.pop();
+        while(--k > 0){
+            MyLinkedList.ListNode tmp = nodeStack.pop();
+            tmp.next = firstNode;
+            firstNode = tmp;
+        }
+        
+        return firstNode;
     }
 
     /**

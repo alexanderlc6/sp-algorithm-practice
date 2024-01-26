@@ -101,19 +101,54 @@ public class ReverseKGroup {
         return reverse(ans.next);
     }
 
+    /**
+     递归法
+     *
+     三段式模版：
+     终止条件： 当进行到最后一个分组，即不足k次遍历到链表尾（0次也算），就将剩余的部分直接返回。
+     返回值： 每一级要返回的就是翻转后的这一分组的头，以及连接好它后面所有翻转好的分组链表。
+     本级任务： 对于每个子问题，先遍历k次，找到该组结尾在哪里，然后从这一组开头遍历到结尾，依次翻转，结尾就可以作为下一个分组的开头，而先前指向开头的元素已经跑到了这一分组的最后，可以用它来连接它后面的子问题，即后面分组的头。
+     *
+     * @param head ListNode类
+     * @param k int整型
+     * @return ListNode类
+     */
+    public MyLinkedList.ListNode reverseKGroup (MyLinkedList.ListNode head, int k) {
+        MyLinkedList.ListNode tail = head;
+        for(int i=0; i<k;i++){
+            if(tail == null){
+                return head;
+            }
 
-        public static void main(String[] args) {
-            ReverseKGroup reverseKGroup = new ReverseKGroup();
-            int[] data =  {1,3,5,4,2,8,2};
-
-            //场景1
-            MyLinkedList list1 = new MyLinkedList().initList(data);
-            System.out.println("=====以K个元素组反转链表(右侧不满足k个则不反转)=====");
-            list1.printValues(reverseKGroup.reverseKByNormalGroup(list1.dummy.next, 2));
-
-            //场景2
-            System.out.println("=====以K个元素组反转链表(左侧不满足k个则不反转)=====");
-            MyLinkedList list2 = new MyLinkedList().initList(data);
-            list2.printValues(reverseKGroup.reverseKBySortGroup(list2.dummy.next, 3));
+            tail = tail.next;
         }
+
+        MyLinkedList.ListNode pre = null;
+        MyLinkedList.ListNode cur = head;
+
+        while(cur != tail){
+            MyLinkedList.ListNode tmp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = tmp;
+        }
+
+        head.next = reverseKGroup(tail, k);
+        return pre;
+    }
+
+    public static void main(String[] args) {
+        ReverseKGroup reverseKGroup = new ReverseKGroup();
+        int[] data =  {1,3,5,4,2,8,2};
+
+        //场景1
+        MyLinkedList list1 = new MyLinkedList().initList(data);
+        System.out.println("=====以K个元素组反转链表(右侧不满足k个则不反转)=====");
+        list1.printValues(reverseKGroup.reverseKByNormalGroup(list1.dummy.next, 2));
+
+        //场景2
+        System.out.println("=====以K个元素组反转链表(左侧不满足k个则不反转)=====");
+        MyLinkedList list2 = new MyLinkedList().initList(data);
+        list2.printValues(reverseKGroup.reverseKBySortGroup(list2.dummy.next, 3));
+    }
 }
